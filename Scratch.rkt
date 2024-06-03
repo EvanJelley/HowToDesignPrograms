@@ -4,19 +4,19 @@
 ; 3.6 - World Programs
 
 ; Exercise 39
-(define SCALAR 5)
+(define SCALAR 10)
 
 ; Exercise 41 - Scenery
 (define tree
-  (underlay/xy (circle 10 "solid" "green")
-               9 15
-               (rectangle 2 20 "solid" "brown")))
+  (underlay/xy (circle (* 2 SCALAR) "solid" "green")
+               (* 1.8 SCALAR) (* 3 SCALAR)
+               (rectangle (/ SCALAR 2) (* 4 SCALAR) "solid" "brown")))
 
 (define WIDTH-OF-WORLD (* SCALAR 120))
 (define HEIGHT-OF-WORLD (* SCALAR 10))
 (define mt (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
 (define BACKGROUND
-  (place-image tree (/ WIDTH-OF-WORLD 3) (- HEIGHT-OF-WORLD 7) mt))
+  (place-image tree (/ WIDTH-OF-WORLD 3) (- HEIGHT-OF-WORLD (* SCALAR 1.1)) mt))
 
 (define WHEEL-RADIUS SCALAR)
 (define WHEEL-DISTANCE (* SCALAR 1.25))
@@ -38,24 +38,33 @@
   (overlay/align "middle" "bottom" CAR-BODY CAR-TOP))
 (define CAR
   (overlay/offset BOTH-WHEELS 0 (* SCALAR -1.25) CAR-MAIN))
+(define Y-CAR
+  (- HEIGHT-OF-WORLD (/ CAR-HEIGHT 2)))
+(define SPEED (/ SCALAR 2))
 
 
-; A WorldState is a Number.
-; interpretation the number of pixels between
-; the left border of the scene and the car
+; REVISED FOR MOUSE CLICK INTERUPTS
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down"
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  (cond
+    [(string=? "button-down" me) x-mouse]
+    [else x-position-of-car]))
 
 ; WorldState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render x)
-  (place-image CAR (+ (/ CAR-WIDTH 2) x)
-               (- HEIGHT-OF-WORLD (/ CAR-HEIGHT 2)) BACKGROUND))
+  (place-image CAR x
+               Y-CAR BACKGROUND))
  
 ; WorldState -> WorldState
 ; adds 3 to x to move the car right 
 (define (tock x)
-  (+ x 3))
+  (+ x SPEED))
 
+; Exercise 42
 ; WorldState -> Boolean
 ; returns false when the cw + CAR-WIDTH/2 is > WIDTH-OF-WORLD
 (define (finish world)
@@ -71,6 +80,7 @@
    (big-bang ws
      [on-tick tock]
      [to-draw render]
+     [on-mouse hyper]
      [stop-when finish]))
 
 (main 13)
