@@ -21,3 +21,56 @@
 (check-expect (manhattan-distance (make-posn 0 5)) 5)
 (check-expect (manhattan-distance (make-posn 7 0)) 7)
 (check-expect (manhattan-distance (make-posn 3 4)) 7)
+
+; Exercise 65 & 66
+(define-struct movie [title producer year])
+; constructor: make-movie
+; selectors: movie-title (string), movie-producer (string), movie-year (number)
+; predicate: movie?
+
+(make-movie "Jaws" "Steven Spielberg" 1975)
+
+
+(define-struct entry [name phone email])
+
+(define-struct ball [location velocity])
+(make-ball 10 -3)
+
+; Exercise 67
+(define SPEED 3)
+(define-struct balld [location direction])
+(make-balld 10 "up")
+
+; In this instance a string is being used to represent direction.
+; Speed is not a part of the data structure but an external value.
+; To incorporate this in a program SPEED must be combinede with the internal structure direction to get velocity
+
+(define-struct vel [deltax deltay])
+
+(define ball1
+  (make-ball (make-posn 30 40) (make-vel -10 5)))
+
+; Exercise 68
+(define-struct ballf [x y deltax deltay])
+
+(make-ballf 30 40 -10 5)
+
+(define-struct centry [name home office cell])
+ 
+(define-struct phone [area number])
+
+; Exercise 70
+; LAWS FOR (define-struct phone [area number])
+; (phone-area (make-phone a0 n0)) == a0
+; (phone-number (make-phone a0 n0)) == n0
+
+; distances in terms of pixels:
+(define HEIGHT 200)
+(define MIDDLE (quotient HEIGHT 2))
+(define WIDTH  400)
+(define CENTER (quotient WIDTH 2))
+ 
+(define-struct game [left-player right-player ball])
+ 
+(define game0
+  (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
