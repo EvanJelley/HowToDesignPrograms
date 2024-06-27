@@ -56,8 +56,7 @@
 (make-ballf 30 40 -10 5)
 
 (define-struct centry [name home office cell])
- 
-(define-struct phone [area number])
+
 
 ; Exercise 70
 ; LAWS FOR (define-struct phone [area number])
@@ -74,3 +73,84 @@
  
 (define game0
   (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
+
+; Exercise 72
+(define-struct phone [area number])
+; A phone is a structure:
+; (make-phone Number String)
+; interpretation: area is a number representing the area code for a phone number
+; number is a string containing the rest of the number with the normal "-"
+
+
+
+(define MTS (empty-scene 100 100))
+(define DOT (circle 3 "solid" "red"))
+ 
+; A Posn represents the state of the world.
+ 
+; Posn -> Posn 
+(define (red-dot-animation p0)
+  (big-bang p0
+    [on-tick x+]
+    [on-mouse reset-dot]
+    [to-draw scene+dot]))
+
+; Posn -> Image
+; adds a red spot to MTS at p
+(define (scene+dot p)
+  (place-image DOT (posn-x p) (posn-y p) MTS))
+
+; Posn -> Posn
+; increases the x-coordinate of p by 3
+(check-expect (x+ (make-posn 10 0)) (make-posn 13 0))
+(define (x+ p)
+  (make-posn (+ (posn-x p) 3) (posn-y p)))
+
+; Exercise 73
+(define (posn-up-x p n)
+  (make-posn n (posn-y p)))
+
+; Posn Number Number MouseEvt -> Posn 
+; for mouse clicks, (make-posn x y); otherwise p
+(define (reset-dot p x y me)
+  (cond
+    [(mouse=? "button-down" me) (make-posn x y)]
+    [else p]))
+
+; (red-dot-animation (make-posn 0 0))
+
+
+(define-struct ufo [loc vel])
+; A UFO is a structure: 
+;   (make-ufo Posn Vel)
+; interpretation (make-ufo p v) is at location
+; p moving at velocity v
+
+(define v1 (make-vel 8 -3))
+(define v2 (make-vel -5 -3))
+
+(define p1 (make-posn 22 80))
+(define p2 (make-posn 30 77))
+ 
+(define u1 (make-ufo p1 v1))
+(define u2 (make-ufo p1 v2))
+(define u3 (make-ufo p2 v1))
+(define u4 (make-ufo p2 v2))
+
+; UFO -> UFO
+; determines where u moves in one clock tick; 
+; leaves the velocity as is
+ 
+(check-expect (ufo-move-1 u1) u3)
+(check-expect (ufo-move-1 u2)
+              (make-ufo (make-posn 17 77) v2))
+ 
+(define (ufo-move-1 u)
+  (make-ufo (posn+ (ufo-loc u) (ufo-vel u))
+            (ufo-vel u)))
+
+; Posn Vel -> Posn 
+; adds v to p 
+(define (posn+ p v)
+  (make-posn (+ (posn-x p) (vel-deltax v))
+             (+ (posn-y p) (vel-deltay v))))

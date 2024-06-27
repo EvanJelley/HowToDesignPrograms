@@ -14,3 +14,99 @@
 (check-expect (distance-to-0 (make-posn 5 12)) 13)
 
 
+; Exercise 64
+(define (manhattan-distance ap)
+  (+ (posn-x ap) (posn-y ap)))
+
+(check-expect (manhattan-distance (make-posn 0 5)) 5)
+(check-expect (manhattan-distance (make-posn 7 0)) 7)
+(check-expect (manhattan-distance (make-posn 3 4)) 7)
+
+; Exercise 65 & 66
+(define-struct movie [title producer year])
+; constructor: make-movie
+; selectors: movie-title (string), movie-producer (string), movie-year (number)
+; predicate: movie?
+
+(make-movie "Jaws" "Steven Spielberg" 1975)
+
+
+(define-struct entry [name phone email])
+
+(define-struct ball [location velocity])
+(make-ball 10 -3)
+
+; Exercise 67
+(define SPEED 3)
+(define-struct balld [location direction])
+(make-balld 10 "up")
+
+; In this instance a string is being used to represent direction.
+; Speed is not a part of the data structure but an external value.
+; To incorporate this in a program SPEED must be combinede with the internal structure direction to get velocity
+
+(define-struct vel [deltax deltay])
+
+(define ball1
+  (make-ball (make-posn 30 40) (make-vel -10 5)))
+
+; Exercise 68
+(define-struct ballf [x y deltax deltay])
+
+(make-ballf 30 40 -10 5)
+
+(define-struct centry [name home office cell])
+
+
+; Exercise 70
+; LAWS FOR (define-struct phone [area number])
+; (phone-area (make-phone a0 n0)) == a0
+; (phone-number (make-phone a0 n0)) == n0
+
+; distances in terms of pixels:
+(define HEIGHT 200)
+(define MIDDLE (quotient HEIGHT 2))
+(define WIDTH  400)
+(define CENTER (quotient WIDTH 2))
+ 
+(define-struct game [left-player right-player ball])
+ 
+(define game0
+  (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
+
+; Exercise 72
+(define-struct phone [area number])
+; A phone is a structure:
+; (make-phone Number String)
+; interpretation: area is a number representing the area code for a phone number
+; number is a string containing the rest of the number with the normal "-"
+
+
+
+(define MTS (empty-scene 100 100))
+(define DOT (circle 3 "solid" "red"))
+ 
+; A Posn represents the state of the world.
+ 
+; Posn -> Posn 
+(define (main p0)
+  (big-bang p0
+    [on-tick x+]
+    [on-mouse reset-dot]
+    [to-draw scene+dot]))
+
+; Posn -> Image
+; adds a red spot to MTS at p
+(define (scene+dot p)
+  (place-image DOT (posn-x p) (posn-y p) MTS))
+
+; Posn -> Posn
+; increases the x-coordinate of p by 3
+(check-expect (x+ (make-posn 10 0)) (make-posn 13 0))
+(define (x+ p)
+  (make-posn (+ (posn-x p) 3) (posn-y p)))
+
+; Exercise 73
+(define (posn-up-x p n)
+  (make-posn n (posn-y p)))
+
