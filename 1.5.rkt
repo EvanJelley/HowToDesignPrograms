@@ -154,3 +154,34 @@
 (define (posn+ p v)
   (make-posn (+ (posn-x p) (vel-deltax v))
              (+ (posn-y p) (vel-deltay v))))
+
+
+; Exercise 76
+; movie is (make-movie String String Number)
+; person is (make-person String String String Number)
+; pet is (make-pet String Number)
+
+; Exercise 77
+; (define struct since-midnight (hour minute second))
+; since-midnight is (make-since-midnight Number Number Number)
+
+; Exercise 79
+; (make-Color "yellow") (make-Color "blue")
+; (make-H 0) (make-H 20) (make-H 100)
+; (make-Person "Joe" "Montana" #true)
+; (make-dog (make-Person "Joe" "Montana" #true) "Lassie" 4 98)
+; (make-Weapon #false) (make-Weapon (make-posn 2 87))
+
+
+; 
+(define-struct r3 [x y z])
+; An R3 is a structure:
+;   (make-r3 Number Number Number)
+ 
+(define ex1 (make-r3 1 2 13))
+(define ex2 (make-r3 -1 0 3))
+
+; R3 -> Number 
+; determines the distance of p to the origin 
+(define (r3-distance-to-0 p)
+  (sqrt (+ (r3-x p) (r3-y p) (r3-z p))))
